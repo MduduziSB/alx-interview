@@ -1,5 +1,12 @@
 #!/usr/bin/python3
+"""Pascal's triangle"""
+
+
 def pascal_triangle(n):
+    """
+    This function returns pascal's triangle
+    represented by matrix of integers
+    """
     if n <= 0:
         return []
 
