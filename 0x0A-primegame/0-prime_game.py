@@ -12,29 +12,46 @@ def is_prime(num):
     return True
 
 
+def primes_in_range(beg, end):
+    """Returns a list of prime numbers in a range of [beg - end]."""
+    primes = [i for i in range(beg, end+1) if is_prime(i)]
+    return primes
+
+
 def isWinner(x, nums):
     """Determines who the winner is between Maria and Ben"""
-    winners = {"Maria": 0, "Ben": 0}
+    maria_moves = 0
+    ben_moves = 0
 
-    for n in nums:
-        maria_moves = 0
-        ben_moves = 0
+    for num in nums:
+        roundsSet = list(range(1, num + 1))
+        primesSet = primes_in_range(1, num)
 
-        for i in range(2, n + 1):
-            if is_prime(i):
-                if maria_moves == ben_moves:
-                    maria_moves += 1
-                else:
+        if not primesSet:
+            ben_moves += 1
+            continue
+
+        isMariaTurns = True
+
+        while(True):
+            if not primesSet:
+                if isMariaTurns:
                     ben_moves += 1
+                else:
+                    maria_moves += 1
+                break
 
-        if maria_moves > ben_moves:
-            winners["Maria"] += 1
-        elif ben_moves > maria_moves:
-            winners["Ben"] += 1
+            smallestPrime = primesSet.pop(0)
+            roundsSet.remove(smallestPrime)
 
-    if winners["Maria"] > winners["Ben"]:
+            roundsSet = [x for x in roundsSet if x % smallestPrime != 0]
+
+            isMariaTurns = not isMariaTurns
+
+    if maria_moves > ben_moves:
         return "Maria"
-    if winners["Ben"] > winners["Maria"]:
+
+    if maria_moves < ben_moves:
         return "Ben"
 
     return None
