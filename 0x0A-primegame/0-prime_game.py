@@ -2,35 +2,39 @@
 """Prime number module"""
 
 
-def sieve_of_eratosthenes(n):
-    """This method finds all prime numbers up to n"""
-    primes = [True] * (n+1)
-    primes[0] = primes[1] = False
-    p = 2
-    while p**2 <= n:
-        if primes[p]:
-            for i in range(p**2, n+1, p):
-                primes[i] = False
-        p += 1
-    return [i for i in range(n+1) if primes[i]]
+def is_prime(num):
+    """This module computes all the prime numbers up num"""
+    if num < 2:
+        return False
+    for i in range(2, int(num**0.5) + 1):
+        if num % i == 0:
+            return False
+    return True
 
 
 def isWinner(x, nums):
-    """This function finds who the winner is"""
+    """Determines who the winner is between Maria and Ben"""
     winners = {"Maria": 0, "Ben": 0}
 
     for n in nums:
-        primes = sieve_of_eratosthenes(n)
-        num_primes = len(primes)
+        maria_moves = 0
+        ben_moves = 0
 
-        if num_primes % 2 == 0:
-            winners["Ben"] += 1
-        else:
+        for i in range(2, n + 1):
+            if is_prime(i):
+                if maria_moves == ben_moves:
+                    maria_moves += 1
+                else:
+                    ben_moves += 1
+
+        if maria_moves > ben_moves:
             winners["Maria"] += 1
+        elif ben_moves > maria_moves:
+            winners["Ben"] += 1
 
     if winners["Maria"] > winners["Ben"]:
         return "Maria"
-    elif winners["Ben"] > winners["Maria"]:
+    if winners["Ben"] > winners["Maria"]:
         return "Ben"
-    else:
-        return None
+
+    return None
